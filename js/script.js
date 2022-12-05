@@ -52,4 +52,5 @@ taskForm.addEventListener('submit', (e) => {
     displayTaskList();
     e.preventDefault();
     inputField.value = '';
+    manipulateButton();
 });
