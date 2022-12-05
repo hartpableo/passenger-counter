@@ -24,6 +24,7 @@ const listItemCount = taskListItem.length;
 const removeTaskList = () => {
     taskList.classList.add('d-none');
     taskList.classList.remove('d-flex');
+    taskList.setAttribute('aria-hidden', true);
     emptyListNotice.setAttribute('aria-hidden', false);
     emptyListNotice.classList.remove('d-none');
     emptyListNotice.classList.add('d-block');
@@ -31,6 +32,7 @@ const removeTaskList = () => {
 const displayTaskList = () => {
     taskList.classList.add('d-flex');
     taskList.classList.remove('d-none');
+    taskList.setAttribute('aria-hidden', false);
     emptyListNotice.setAttribute('aria-hidden', true);
     emptyListNotice.classList.remove('d-block');
     emptyListNotice.classList.add('d-none');
