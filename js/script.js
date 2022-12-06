@@ -55,7 +55,7 @@ const displayTaskList = () => {
     emptyListNotice.classList.remove('d-block');
     emptyListNotice.classList.add('d-none');
 };
-const taskListSectionDisplay = (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
+(listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
 
 // append inputted data to the list
 taskForm.addEventListener('submit', (e) => {
@@ -72,7 +72,32 @@ taskForm.addEventListener('submit', (e) => {
     taskList.insertAdjacentHTML('beforeend', taskListItemMarkup);
     displayTaskList();
     localStorage.setItem('tasks', JSON.stringify(initialData));
-    e.preventDefault();
     inputField.value = '';
     manipulateButton();
+    const completeButton = document.querySelectorAll('.complete');
+    completeButton.forEach(completeTrigger);
+    (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
+    e.preventDefault();
 });
+
+// task completed
+const completeButton = document.querySelectorAll('.complete');
+
+const completeTrigger = (item) => {
+    item.addEventListener('click', (e) => {
+        let element = e.target;
+        let parentLi = element.parentNode.closest('.task-list-item');
+        parentLi.classList.add('completed');
+        let taskText = parentLi.querySelector('span').textContent;
+        let index = initialData.indexOf(taskText);
+        setTimeout(function() {
+            (index >= 0) ? initialData.splice(index, 1) : null;
+            localStorage.setItem('tasks', JSON.stringify(initialData));
+            parentLi.remove();
+            (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
+        }, 1800);
+        return;
+    })
+}
+
+completeButton.forEach(completeTrigger);
