@@ -74,8 +74,14 @@ taskForm.addEventListener('submit', (e) => {
     localStorage.setItem('tasks', JSON.stringify(initialData));
     inputField.value = '';
     manipulateButton();
+
+    // completed task
     const completeButton = document.querySelectorAll('.complete');
     completeButton.forEach(completeTrigger);
+    // deleted task
+    const deleteButton = document.querySelectorAll('.delete');
+    deleteButton.forEach(deleteTrigger);
+    
     (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
     e.preventDefault();
 });
@@ -101,3 +107,25 @@ const completeTrigger = (item) => {
 }
 
 completeButton.forEach(completeTrigger);
+
+// delete task
+const deleteButton = document.querySelectorAll('.delete');
+
+const deleteTrigger = (item) => {
+    item.addEventListener('click', (e) => {
+        let element = e.target;
+        let parentLi = element.parentNode.closest('.task-list-item');
+        parentLi.classList.add('deleted');
+        let taskText = parentLi.querySelector('span').textContent;
+        let index = initialData.indexOf(taskText);
+        setTimeout(function() {
+            (index >= 0) ? initialData.splice(index, 1) : null;
+            localStorage.setItem('tasks', JSON.stringify(initialData));
+            parentLi.remove();
+            (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
+        }, 1800);
+        return;
+    })
+}
+
+deleteButton.forEach(deleteTrigger);
