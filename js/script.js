@@ -6,9 +6,12 @@ const taskList = document.querySelector('.tasks');
 const taskListItem = document.querySelectorAll('.task-list-item');
 const emptyListNotice = document.querySelector('.notice');
 
+// handler: check if value only has spaces
+const onlySpaces = (value) => {return value.trim().length === 0};
+
 // manipulate button style
 const manipulateButton = () => {
-    if (inputField.value && inputField.value != ' ') {
+    if (inputField.value && onlySpaces(inputField.value) == false) {
         submitTask.classList.remove('disabled')
     } else {
         submitTask.classList.add('disabled');
