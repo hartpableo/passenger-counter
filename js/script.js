@@ -5,6 +5,7 @@ const taskForm = document.querySelector('#task-form')
 const taskList = document.querySelector('.tasks');
 const taskListItem = document.querySelectorAll('.task-list-item');
 const emptyListNotice = document.querySelector('.notice');
+const taskGeneralControls = document.querySelector('.tasks-general-controls');
 
 // handler: check if value only has spaces
 const onlySpaces = (value) => {return value.trim().length === 0};
@@ -43,6 +44,8 @@ initialData.forEach(displayTasks);
 // task list section display
 const listItemCount = taskListItem.length;
 const removeTaskList = () => {
+    taskGeneralControls.classList.add('d-none');
+    taskGeneralControls.classList.remove('d-flex');
     taskList.classList.add('d-none');
     taskList.classList.remove('d-flex');
     taskList.setAttribute('aria-hidden', true);
@@ -51,6 +54,8 @@ const removeTaskList = () => {
     emptyListNotice.classList.add('d-block');
 };
 const displayTaskList = () => {
+    taskGeneralControls.classList.add('d-flex');
+    taskGeneralControls.classList.remove('d-none');
     taskList.classList.add('d-flex');
     taskList.classList.remove('d-none');
     taskList.setAttribute('aria-hidden', false);
