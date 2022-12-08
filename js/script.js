@@ -63,72 +63,81 @@ const displayTaskList = () => {
 // append inputted data to the list
 taskForm.addEventListener('submit', (e) => {
     let inputFieldValue = inputField.value.trim();
-    initialData.push(inputFieldValue);
-    let taskListItemMarkup = `<li class="task-list-item list-group-item d-flex flex-wrap flex-md-nowrap justify-content-between align-items-start">
-    <span class="text-center text-md-start">${inputFieldValue}</span>
-    <div class="task-controls text-md-end text-center text-white mt-3 mt-md-0">
-        <button class="complete d-inline-flex justify-content-center align-items-center align-middle" type="button"><small class="visually-hidden">Task Completed</small><i class="bi bi-check-lg"></i></button>
-        <button class="delete d-inline-flex justify-content-center align-items-center align-middle" type="button"><small class="visually-hidden">Delete Task</small><i class="bi bi-trash"></i></button>
-        <button class="edit d-inline-flex justify-content-center align-items-center align-middle" type="button"><small class="visually-hidden">Edit Task</small><i class="bi bi-pencil-square"></i></button>
-    </div>
-    </li>`;
-    taskList.insertAdjacentHTML('beforeend', taskListItemMarkup);
-    displayTaskList();
-    localStorage.setItem('tasks', JSON.stringify(initialData));
+    const testFunc = () => {
+        initialData.push(inputFieldValue);
+        let taskListItemMarkup = `<li class="task-list-item list-group-item d-flex flex-wrap flex-md-nowrap justify-content-between align-items-start">
+        <span class="text-center text-md-start">${inputFieldValue}</span>
+        <div class="task-controls text-md-end text-center text-white mt-3 mt-md-0">
+            <button class="complete d-inline-flex justify-content-center align-items-center align-middle" type="button"><small class="visually-hidden">Task Completed</small><i class="bi bi-check-lg"></i></button>
+            <button class="delete d-inline-flex justify-content-center align-items-center align-middle" type="button"><small class="visually-hidden">Delete Task</small><i class="bi bi-trash"></i></button>
+            <button class="edit d-inline-flex justify-content-center align-items-center align-middle" type="button"><small class="visually-hidden">Edit Task</small><i class="bi bi-pencil-square"></i></button>
+        </div>
+        </li>`;
+        taskList.insertAdjacentHTML('beforeend', taskListItemMarkup);
+        // displayTaskList();
+        localStorage.setItem('tasks', JSON.stringify(initialData));
+    }
+    (initialData.indexOf(inputFieldValue) == -1) ? testFunc() : null;
+
+    // empty the input field after submit
     inputField.value = '';
+
+    // to disable button after successful submit
     manipulateButton();
 
     // completed task
-    const completeButton = document.querySelectorAll('.complete');
+    let completeButton = document.querySelectorAll('.complete');
     completeButton.forEach(completeTrigger);
+
     // deleted task
-    const deleteButton = document.querySelectorAll('.delete');
-    deleteButton.forEach(deleteTrigger);
+    // const deleteButton = document.querySelectorAll('.delete');
+    // deleteButton.forEach(deleteTrigger);
     
     (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
     e.preventDefault();
 });
 
 // task completed
-const completeButton = document.querySelectorAll('.complete');
+let completeButton = document.querySelectorAll('.complete');
 
 const completeTrigger = (item) => {
     item.addEventListener('click', (e) => {
-        let element = e.target;
+        let element = e.currentTarget;
         let parentLi = element.parentNode.closest('.task-list-item');
         parentLi.classList.add('completed');
         let taskText = parentLi.querySelector('span').textContent;
-        let index = initialData.indexOf(taskText);
         setTimeout(function() {
+            let index = initialData.indexOf(taskText);
             (index >= 0) ? initialData.splice(index, 1) : null;
+            // initialData.splice(index, 1);
             localStorage.setItem('tasks', JSON.stringify(initialData));
             parentLi.remove();
             (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
         }, 1800);
-        return;
+        console.log(element)
     })
 }
 
 completeButton.forEach(completeTrigger);
 
 // delete task
-const deleteButton = document.querySelectorAll('.delete');
+// let deleteButton = document.querySelectorAll('.delete');
 
-const deleteTrigger = (item) => {
-    item.addEventListener('click', (e) => {
-        let element = e.target;
-        let parentLi = element.parentNode.closest('.task-list-item');
-        parentLi.classList.add('deleted');
-        let taskText = parentLi.querySelector('span').textContent;
-        let index = initialData.indexOf(taskText);
-        setTimeout(function() {
-            (index >= 0) ? initialData.splice(index, 1) : null;
-            localStorage.setItem('tasks', JSON.stringify(initialData));
-            parentLi.remove();
-            (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
-        }, 1800);
-        return;
-    })
-}
+// const deleteTrigger = (item) => {
+//     item.addEventListener('click', (e) => {
+//         let element = e.target;
+//         let parentLi = element.parentNode.closest('.task-list-item');
+//         parentLi.classList.add('deleted');
+//         let taskText = parentLi.querySelector('span').textContent;
+//         let index = initialData.indexOf(taskText);
+//         setTimeout(function() {
+//             (index >= 0) ? initialData.splice(index, 1) : null;
+//             localStorage.setItem('tasks', JSON.stringify(initialData));
+//             parentLi.remove();
+//             (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
+//         }, 1800);
+//         return;
+//     })
+// }
 
-deleteButton.forEach(deleteTrigger);
+// deleteButton.forEach(deleteTrigger);

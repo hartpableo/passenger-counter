@@ -63,6 +63,7 @@ h1 {
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     transition: all 500ms ease-in-out;
+    transform-origin: top;
 }
 
 .tasks .list-group-item.completed {
@@ -165,21 +166,25 @@ h1 {
 }
 
 @keyframes fadeIn {
-    from {
+    0% {
         opacity: 0;
     }
 
-    to {
+    100% {
         opacity: 1;
     }
 }
 
 @keyframes fadeOut {
-    from {
+    0% {
         opacity: 1;
     }
 
-    to {
+    50% {
         opacity: 0;
+    }
+
+    100% {
+        transform: scaleY(0);
     }
 }
