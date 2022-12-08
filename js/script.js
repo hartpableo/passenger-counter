@@ -12,9 +12,9 @@ const onlySpaces = (value) => {return value.trim().length === 0};
 // manipulate button style
 const manipulateButton = () => {
     if (inputField.value && onlySpaces(inputField.value) == false) {
-        submitTask.classList.remove('disabled')
+        submitTask.removeAttribute('disabled')
     } else {
-        submitTask.classList.add('disabled');
+        submitTask.setAttribute('disabled', '');
     }
 }
 manipulateButton();
@@ -60,6 +60,50 @@ const displayTaskList = () => {
 };
 (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
 
+// task completed
+let completeButton = document.querySelectorAll('.complete');
+
+let completeTrigger = (item) => {
+    item.addEventListener('click', (e) => {
+        let element = e.currentTarget;
+        let parentLi = element.parentNode.closest('.task-list-item');
+        parentLi.classList.add('completed');
+        let taskText = parentLi.querySelector('span').textContent;
+        setTimeout(function() {
+            let index = initialData.indexOf(taskText);
+            (index >= 0) ? initialData.splice(index, 1) : null;
+            localStorage.setItem('tasks', JSON.stringify(initialData));
+            parentLi.remove();
+            (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
+        }, 1800);
+        console.log(element)
+    })
+}
+
+completeButton.forEach(completeTrigger);
+
+// delete task
+let deleteButton = document.querySelectorAll('.delete');
+
+let deleteTrigger = (item) => {
+    item.addEventListener('click', (e) => {
+        let element = e.currentTarget;
+        let parentLi = element.parentNode.closest('.task-list-item');
+        parentLi.classList.add('deleted');
+        let taskText = parentLi.querySelector('span').textContent;
+        setTimeout(function() {
+            let index = initialData.indexOf(taskText);
+            (index >= 0) ? initialData.splice(index, 1) : null;
+            localStorage.setItem('tasks', JSON.stringify(initialData));
+            parentLi.remove();
+            (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
+        }, 1800);
+        console.log(element)
+    })
+}
+
+deleteButton.forEach(deleteTrigger);
+
 // append inputted data to the list
 taskForm.addEventListener('submit', (e) => {
     let inputFieldValue = inputField.value.trim();
@@ -74,7 +118,6 @@ taskForm.addEventListener('submit', (e) => {
         </div>
         </li>`;
         taskList.insertAdjacentHTML('beforeend', taskListItemMarkup);
-        // displayTaskList();
         localStorage.setItem('tasks', JSON.stringify(initialData));
     }
     (initialData.indexOf(inputFieldValue) == -1) ? testFunc() : null;
@@ -90,54 +133,9 @@ taskForm.addEventListener('submit', (e) => {
     completeButton.forEach(completeTrigger);
 
     // deleted task
-    // const deleteButton = document.querySelectorAll('.delete');
-    // deleteButton.forEach(deleteTrigger);
+    let deleteButton = document.querySelectorAll('.delete');
+    deleteButton.forEach(deleteTrigger);
     
     (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
     e.preventDefault();
 });
-
-// task completed
-let completeButton = document.querySelectorAll('.complete');
-
-const completeTrigger = (item) => {
-    item.addEventListener('click', (e) => {
-        let element = e.currentTarget;
-        let parentLi = element.parentNode.closest('.task-list-item');
-        parentLi.classList.add('completed');
-        let taskText = parentLi.querySelector('span').textContent;
-        setTimeout(function() {
-            let index = initialData.indexOf(taskText);
-            (index >= 0) ? initialData.splice(index, 1) : null;
-            // initialData.splice(index, 1);
-            localStorage.setItem('tasks', JSON.stringify(initialData));
-            parentLi.remove();
-            (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
-        }, 1800);
-        console.log(element)
-    })
-}
-
-completeButton.forEach(completeTrigger);
-
-// delete task
-// let deleteButton = document.querySelectorAll('.delete');
-
-// const deleteTrigger = (item) => {
-//     item.addEventListener('click', (e) => {
-//         let element = e.target;
-//         let parentLi = element.parentNode.closest('.task-list-item');
-//         parentLi.classList.add('deleted');
-//         let taskText = parentLi.querySelector('span').textContent;
-//         let index = initialData.indexOf(taskText);
-//         setTimeout(function() {
-//             (index >= 0) ? initialData.splice(index, 1) : null;
-//             localStorage.setItem('tasks', JSON.stringify(initialData));
-//             parentLi.remove();
-//             (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
-//         }, 1800);
-//         return;
-//     })
-// }
-
-// deleteButton.forEach(deleteTrigger);
