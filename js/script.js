@@ -1,3 +1,21 @@
+/*
+*   TABLE OF CONTENTS
+*   
+*   - declare variables
+*   - handler: check if value only has spaces
+*   - manipulate "add task" button
+*   - disable control buttons when one item is clicked
+*   - localstorage data
+*   - get and display data from localstorage on page load
+*   - task list section display functions
+*   - task completed
+*   - delete task
+*   - edit an already existing task
+*   - empty list button
+*   - append inputted data to the list
+*
+*/
+
 // declare variables
 const inputField = document.querySelector('#task');
 const submitTask = document.querySelector('#task-button');
@@ -10,7 +28,7 @@ const taskGeneralControls = document.querySelector('.tasks-general-controls');
 // handler: check if value only has spaces
 const onlySpaces = (value) => {return value.trim().length === 0};
 
-// manipulate button style
+// manipulate "add task" button 
 const manipulateButton = () => {
     if (inputField.value && onlySpaces(inputField.value) == false) {
         submitTask.removeAttribute('disabled')
@@ -35,7 +53,7 @@ inputField.addEventListener('input', () => {
 (localStorage.getItem('tasks') == null) ? localStorage.setItem('tasks', '[]') : null;
 let initialData = JSON.parse(localStorage.getItem('tasks'));
 
-// get and display data from localstorage
+// get and display data from localstorage on page load
 const displayTasks = (item) => {
         let taskListItemMarkup = `<li class="task-list-item list-group-item d-flex flex-wrap flex-md-nowrap justify-content-between align-items-start">
         <span class="text-center text-md-start">${item}</span>
@@ -49,7 +67,7 @@ const displayTasks = (item) => {
 }
 initialData.forEach(displayTasks);
 
-// task list section display
+// task list section display functions
 let listItemCount = taskListItem.length;
 const removeTaskList = () => {
     taskGeneralControls.classList.add('d-none');
