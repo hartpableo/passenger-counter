@@ -30,11 +30,7 @@ const onlySpaces = (value) => {return value.trim().length === 0};
 
 // manipulate "add task" button 
 const manipulateButton = () => {
-    if (inputField.value && onlySpaces(inputField.value) == false) {
-        submitTask.removeAttribute('disabled')
-    } else {
-        submitTask.setAttribute('disabled', '');
-    }
+    (inputField.value && onlySpaces(inputField.value) == false) ? submitTask.removeAttribute('disabled') : submitTask.setAttribute('disabled', '');
 }
 manipulateButton();
 inputField.addEventListener('input', () => {
