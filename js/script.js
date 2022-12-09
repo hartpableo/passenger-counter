@@ -23,6 +23,14 @@ inputField.addEventListener('input', () => {
     manipulateButton();
 });
 
+ // disable control buttons when one item is clicked
+ let disableButtons = (targetArr) => {
+    const itemControlButtons = targetArr.querySelectorAll('button');
+    itemControlButtons.forEach((item) => {
+        item.setAttribute('disabled', '');
+    });
+}
+
 // localstorage data
 (localStorage.getItem('tasks') == null) ? localStorage.setItem('tasks', '[]') : null;
 let initialData = JSON.parse(localStorage.getItem('tasks'));
@@ -74,6 +82,7 @@ let completeTrigger = (item) => {
         let parentLi = element.parentNode.closest('.task-list-item');
         parentLi.classList.add('completed');
         let taskText = parentLi.querySelector('span').textContent;
+        disableButtons(parentLi);
         setTimeout(function() {
             let index = initialData.indexOf(taskText);
             (index >= 0) ? initialData.splice(index, 1) : null;
@@ -81,7 +90,6 @@ let completeTrigger = (item) => {
             parentLi.remove();
             (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
         }, 1800);
-        console.log(element)
     })
 }
 
@@ -96,6 +104,7 @@ let deleteTrigger = (item) => {
         let parentLi = element.parentNode.closest('.task-list-item');
         parentLi.classList.add('deleted');
         let taskText = parentLi.querySelector('span').textContent;
+        disableButtons(parentLi);
         setTimeout(function() {
             let index = initialData.indexOf(taskText);
             (index >= 0) ? initialData.splice(index, 1) : null;
@@ -103,11 +112,22 @@ let deleteTrigger = (item) => {
             parentLi.remove();
             (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
         }, 1800);
-        console.log(element)
     })
 }
 
 deleteButton.forEach(deleteTrigger);
+
+// edit an already existing task
+let editButton = document.querySelectorAll('.edit');
+
+let editTrigger = (item) => {
+    item.addEventListener('click', (e) => {
+        let element = e.currentTarget;
+        let parentLi = element.parentNode.closest('.task-list-item');
+        let taskText = parentLi.querySelector('span').textContent;
+        // to be continued...
+    });
+};
 
 // append inputted data to the list
 taskForm.addEventListener('submit', (e) => {
