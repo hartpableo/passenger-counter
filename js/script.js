@@ -50,7 +50,7 @@ const displayTasks = (item) => {
 initialData.forEach(displayTasks);
 
 // task list section display
-const listItemCount = taskListItem.length;
+let listItemCount = taskListItem.length;
 const removeTaskList = () => {
     taskGeneralControls.classList.add('d-none');
     taskGeneralControls.classList.remove('d-flex');
@@ -129,10 +129,36 @@ let editTrigger = (item) => {
     });
 };
 
+// empty list button
+let emptyListButton = document.querySelector('.empty-the-list');
+
+let emptyListTrigger = () => {
+    emptyListButton.addEventListener('click', () => {
+        let currentTaskListItems = document.querySelectorAll('.task-list-item');
+        let AllControlButtons = document.querySelectorAll('.task-controls');
+        AllControlButtons.forEach((item) => {
+            disableButtons(item);
+        });
+        currentTaskListItems.forEach((item) => {
+            item.classList.add('deleted');
+        });
+        setTimeout(function() {
+            initialData.length = 0;
+            localStorage.setItem('tasks', JSON.stringify(initialData));
+            currentTaskListItems.forEach((item) => {
+                item.remove();
+            });
+            (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
+        }, 1800);
+        console.log(taskListItem.length)
+    });
+}
+emptyListTrigger();
+
 // append inputted data to the list
 taskForm.addEventListener('submit', (e) => {
     let inputFieldValue = inputField.value.trim();
-    const testFunc = () => {
+    const appendElement = () => {
         initialData.push(inputFieldValue);
         let taskListItemMarkup = `<li class="task-list-item list-group-item d-flex flex-wrap flex-md-nowrap justify-content-between align-items-start">
         <span class="text-center text-md-start">${inputFieldValue}</span>
@@ -145,7 +171,7 @@ taskForm.addEventListener('submit', (e) => {
         taskList.insertAdjacentHTML('beforeend', taskListItemMarkup);
         localStorage.setItem('tasks', JSON.stringify(initialData));
     }
-    (initialData.indexOf(inputFieldValue) == -1) ? testFunc() : null;
+    (initialData.indexOf(inputFieldValue) == -1) ? appendElement() : null;
 
     // empty the input field after submit
     inputField.value = '';
