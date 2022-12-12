@@ -138,10 +138,33 @@ let editTrigger = (item) => {
     item.addEventListener('click', (e) => {
         let element = e.currentTarget;
         let parentLi = element.parentNode.closest('.task-list-item');
-        let taskText = parentLi.querySelector('span').textContent;
-        // to be continued...
+        let taskTextWrapper = parentLi.querySelector('span');
+        let taskText = taskTextWrapper.textContent;
+        let inputMarkup = `<form class="edit-form" method="post" action="#"><input type="text" class="edit-task-text w-100 d-inline-block" value="${taskText}" aria-hidden="true"></input>
+        <button class="edit-submit visually-hidden" aria-hidden="true">Submit Editted Task</button></form>`;
+        taskTextWrapper.remove();
+        parentLi.insertAdjacentHTML('afterbegin', inputMarkup);
+        let editForm = parentLi.querySelector('.edit-form');
+        let editField = parentLi.querySelector('.edit-task-text');
+        let editSubmit = parentLi.querySelector('.edit-submit');
+        const manipulateSubmit = () => {
+            (editField.value && onlySpaces(editField.value) == false) ? editSubmit.removeAttribute('disabled') : editSubmit.setAttribute('disabled', '');
+        }
+        manipulateSubmit();
+        editField.addEventListener('input', () => {
+            manipulateSubmit();
+        });
+        editForm.addEventListener('submit', () => {
+            // get original task text => originalTaskText = editField.value
+            // get the index of original task text in the array => itemIndex
+            // get new task text => newTaskText
+            // arr.splice(itemIndex, 1, newTaskText)
+            // change text content of originalTaskText to newTaskText
+        });
     });
 };
+
+editButton.forEach(editTrigger);
 
 // empty list button
 let emptyListButton = document.querySelector('.empty-the-list');
@@ -164,7 +187,6 @@ let emptyListTrigger = () => {
             });
             (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
         }, 1800);
-        console.log(taskListItem.length)
     });
 }
 emptyListTrigger();
@@ -200,6 +222,10 @@ taskForm.addEventListener('submit', (e) => {
     // deleted task
     let deleteButton = document.querySelectorAll('.delete');
     deleteButton.forEach(deleteTrigger);
+
+    // edit task
+    let editButton = document.querySelectorAll('.edit');
+    editButton.forEach(editTrigger);
     
     (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
     e.preventDefault();
