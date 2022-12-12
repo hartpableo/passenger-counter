@@ -11,6 +11,8 @@
 *   - task completed
 *   - delete task
 *   - edit an already existing task
+*   - edit task: submit
+*   - edit task: close
 *   - empty list button
 *   - append inputted data to the list
 *
@@ -140,9 +142,13 @@ let editTrigger = (item) => {
         let parentLi = element.parentNode.closest('.task-list-item');
         let taskTextWrapper = parentLi.querySelector('span');
         let taskText = taskTextWrapper.textContent;
-        let inputMarkup = `<form class="edit-form" method="post" action="#"><input type="text" class="edit-task-text w-100 d-inline-block" value="${taskText}" aria-hidden="true"></input>
-        <button class="edit-submit visually-hidden" aria-hidden="true">Submit Editted Task</button></form>`;
-        taskTextWrapper.remove();
+        let inputMarkup = `<form class="edit-form w-100 d-flex justify-content-between align-items-start" method="post" action="#"><input type="text" class="edit-task-text d-inline-block" value="${taskText}" aria-hidden="true"></input>
+        <div class="edit-controls text-white d-flex justify-content-end align-items-start">
+        <button class="edit-submit d-inline-flex justify-content-center flex-column align-items-center" aria-hidden="true"><i class="bi bi-plus-square"></i></button>
+        <button class="edit-close d-inline-flex justify-content-center flex-column align-items-center" aria-hidden="true"><i class="bi bi-x-circle"></i></button>
+        </div>
+        </form>`;
+        taskTextWrapper.classList.add('d-none');
         parentLi.insertAdjacentHTML('afterbegin', inputMarkup);
         let editForm = parentLi.querySelector('.edit-form');
         let editField = parentLi.querySelector('.edit-task-text');
@@ -154,6 +160,8 @@ let editTrigger = (item) => {
         editField.addEventListener('input', () => {
             manipulateSubmit();
         });
+        let itemTaskControls = parentLi.querySelector('.task-controls');
+        itemTaskControls.classList.add('d-none');
         editForm.addEventListener('submit', () => {
             // get original task text => originalTaskText = editField.value
             // get the index of original task text in the array => itemIndex
@@ -165,6 +173,12 @@ let editTrigger = (item) => {
 };
 
 editButton.forEach(editTrigger);
+
+// edit task: submit
+// to be continued...
+
+// edit task: close
+// to be continued...
 
 // empty list button
 let emptyListButton = document.querySelector('.empty-the-list');
