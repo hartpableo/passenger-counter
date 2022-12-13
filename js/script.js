@@ -133,6 +133,19 @@ let deleteTrigger = (item) => {
 
 deleteButton.forEach(deleteTrigger);
 
+// edit task: close
+// let closeEdit = (item) => {
+//     closeButton.addEventListener('click', () => {
+//         let closeButton = item.querySelector('.edit-close');
+//         let taskTextWrapper = item.querySelector('span');
+//         let itemTaskControls = item.querySelector('.task-controls');
+//         taskTextWrapper.classList.remove('d-none');
+//         taskTextWrapper.classList.add('d-inline-block');
+//         itemTaskControls.classList.remove('d-none');
+//         itemTaskControls.classList.add('d-inline-block');
+//     });
+// };
+
 // edit an already existing task
 let editButton = document.querySelectorAll('.edit');
 
@@ -149,6 +162,7 @@ let editTrigger = (item) => {
         </div>
         </form>`;
         taskTextWrapper.classList.add('d-none');
+        taskTextWrapper.classList.remove('d-inline-block');
         parentLi.insertAdjacentHTML('afterbegin', inputMarkup);
         let editForm = parentLi.querySelector('.edit-form');
         let editField = parentLi.querySelector('.edit-task-text');
@@ -160,25 +174,23 @@ let editTrigger = (item) => {
         editField.addEventListener('input', () => {
             manipulateSubmit();
         });
+        let initialData = JSON.parse(localStorage.getItem('tasks'));
+        let originalTaskText = taskTextWrapper.textContent;
         let itemTaskControls = parentLi.querySelector('.task-controls');
         itemTaskControls.classList.add('d-none');
+        itemTaskControls.classList.remove('d-inline-block');
         editForm.addEventListener('submit', () => {
-            // get original task text => originalTaskText = editField.value
-            // get the index of original task text in the array => itemIndex
-            // get new task text => newTaskText
-            // arr.splice(itemIndex, 1, newTaskText)
-            // change text content of originalTaskText to newTaskText
+            let itemIndex = initialData.indexOf(originalTaskText);
+            let newTaskText = editField.value;
+            initialData.splice(itemIndex, 1, newTaskText);
+            localStorage.setItem('tasks', JSON.stringify(initialData));
+            originalTaskText = newTaskText;
         });
+        e.preventDefault();
     });
 };
 
 editButton.forEach(editTrigger);
-
-// edit task: submit
-// to be continued...
-
-// edit task: close
-// to be continued...
 
 // empty list button
 let emptyListButton = document.querySelector('.empty-the-list');

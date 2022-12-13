@@ -37,6 +37,10 @@ h1 {
     border: none;
 }
 
+.input-container input:focus {
+    outline: 3px solid rgb(217, 71, 71);
+}
+
 .input-container button {
     border-radius: 0 0 .5rem .5rem;
     font-size: 1.7rem;
@@ -171,6 +175,10 @@ h1 {
     font-weight: 300;
     font-size: 1.95rem;
     flex-grow: 1;
+}
+
+.edit-task-text:focus {
+    outline: 2px solid orangered;
 }
 
 .edit-controls {
