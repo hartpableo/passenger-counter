@@ -10,9 +10,8 @@
 *   - task list section display functions
 *   - task completed
 *   - delete task
-*   - edit an already existing task
-*   - edit task: submit
 *   - edit task: close
+*   - edit an already existing task
 *   - empty list button
 *   - append inputted data to the list
 *
@@ -134,17 +133,20 @@ let deleteTrigger = (item) => {
 deleteButton.forEach(deleteTrigger);
 
 // edit task: close
-// let closeEdit = (item) => {
-//     closeButton.addEventListener('click', () => {
-//         let closeButton = item.querySelector('.edit-close');
-//         let taskTextWrapper = item.querySelector('span');
-//         let itemTaskControls = item.querySelector('.task-controls');
-//         taskTextWrapper.classList.remove('d-none');
-//         taskTextWrapper.classList.add('d-inline-block');
-//         itemTaskControls.classList.remove('d-none');
-//         itemTaskControls.classList.add('d-inline-block');
-//     });
-// };
+let closeEdit = (item) => {
+    let closeButton = item.querySelector('.edit-close');
+    closeButton.removeAttribute('disabled');
+    closeButton.addEventListener('click', () => {
+        let taskTextWrapper = item.querySelector('span');
+        let itemTaskControls = item.querySelector('.task-controls');
+        let editForm = item.querySelector('.edit-form');
+        taskTextWrapper.classList.remove('d-none');
+        taskTextWrapper.classList.add('d-inline-block');
+        itemTaskControls.classList.remove('d-none');
+        itemTaskControls.classList.add('d-inline-block');
+        editForm.remove();
+    });
+};
 
 // edit an already existing task
 let editButton = document.querySelectorAll('.edit');
@@ -157,8 +159,8 @@ let editTrigger = (item) => {
         let taskText = taskTextWrapper.textContent;
         let inputMarkup = `<form class="edit-form w-100 d-flex justify-content-between align-items-start" method="post" action="#"><input type="text" class="edit-task-text d-inline-block" value="${taskText}" aria-hidden="true"></input>
         <div class="edit-controls text-white d-flex justify-content-end align-items-start">
-        <button class="edit-submit d-inline-flex justify-content-center flex-column align-items-center" aria-hidden="true"><i class="bi bi-plus-square"></i></button>
-        <button class="edit-close d-inline-flex justify-content-center flex-column align-items-center" aria-hidden="true"><i class="bi bi-x-circle"></i></button>
+        <button type="submit" class="edit-submit d-inline-flex justify-content-center flex-column align-items-center" aria-hidden="true"><i class="bi bi-plus-square"></i></button>
+        <button type="button" class="edit-close d-inline-flex justify-content-center flex-column align-items-center" aria-hidden="true"><i class="bi bi-x-circle"></i></button>
         </div>
         </form>`;
         taskTextWrapper.classList.add('d-none');
@@ -168,7 +170,7 @@ let editTrigger = (item) => {
         let editField = parentLi.querySelector('.edit-task-text');
         let editSubmit = parentLi.querySelector('.edit-submit');
         const manipulateSubmit = () => {
-            (editField.value && onlySpaces(editField.value) == false) ? editSubmit.removeAttribute('disabled') : editSubmit.setAttribute('disabled', '');
+            (editField.value && onlySpaces(editField.value) == false && editField.value != taskText) ? editSubmit.removeAttribute('disabled') : editSubmit.setAttribute('disabled', '');
         }
         manipulateSubmit();
         editField.addEventListener('input', () => {
@@ -180,12 +182,16 @@ let editTrigger = (item) => {
         itemTaskControls.classList.add('d-none');
         itemTaskControls.classList.remove('d-inline-block');
         editForm.addEventListener('submit', () => {
-            let itemIndex = initialData.indexOf(originalTaskText);
-            let newTaskText = editField.value;
-            initialData.splice(itemIndex, 1, newTaskText);
-            localStorage.setItem('tasks', JSON.stringify(initialData));
-            originalTaskText = newTaskText;
+            let replaceOldValue = () => {
+                let itemIndex = initialData.indexOf(originalTaskText);
+                let newTaskText = editField.value;
+                initialData.splice(itemIndex, 1, newTaskText);
+                localStorage.setItem('tasks', JSON.stringify(initialData));
+                originalTaskText = newTaskText;
+            }
+            (initialData.indexOf(editField.value) == -1) ? replaceOldValue() : null;
         });
+        closeEdit(parentLi);
         e.preventDefault();
     });
 };
