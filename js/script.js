@@ -193,6 +193,7 @@ let saveEdit = (item, oldText) => {
     });
     let initialData = JSON.parse(localStorage.getItem('tasks'));
     editForm.addEventListener('submit', (e) => {
+        e.preventDefault();
         let replaceOldValue = () => {
             let itemIndex = initialData.indexOf(oldText);
             let newTaskText = editField.value;
@@ -200,7 +201,6 @@ let saveEdit = (item, oldText) => {
             localStorage.setItem('tasks', JSON.stringify(initialData));
             taskTextWrapper.textContent = newTaskText;
         }
-        e.preventDefault();
         (initialData.indexOf(editField.value) == -1) ? replaceOldValue() : null;
         taskTextWrapper.classList.remove('d-none');
         taskTextWrapper.classList.add('d-inline-block');
@@ -258,21 +258,19 @@ taskForm.addEventListener('submit', (e) => {
 
     // to disable button after successful submit
     manipulateButton();
-
+    
     // completed task
     let completeButton = document.querySelectorAll('.complete');
     completeButton.forEach(completeTrigger);
-
+    
     // deleted task
     let deleteButton = document.querySelectorAll('.delete');
     deleteButton.forEach(deleteTrigger);
-
+    
     // edit task
     let editButton = document.querySelectorAll('.edit');
-    for (let singleEditButton of editButton) {
-        singleEditButton.addEventListener('click', editTrigger());
-    };
-    
+    editButton.forEach(editTrigger);
+
     (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
     e.preventDefault();
 });
