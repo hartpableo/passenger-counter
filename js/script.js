@@ -169,42 +169,45 @@ let editTrigger = (item) => {
         itemTaskControls.classList.add('d-none');
         itemTaskControls.classList.remove('d-inline-block');
         parentLi.insertAdjacentHTML('afterbegin', inputMarkup);
+        closeEdit(parentLi);
+        saveEdit(parentLi, taskText);
     });
 };
 
 editButton.forEach(editTrigger);
 
-// edit taskk: save
-// let editForm = parentLi.querySelector('.edit-form');
-// let editField = parentLi.querySelector('.edit-task-text');
-// let editSubmit = parentLi.querySelector('.edit-submit');
-// const manipulateSubmit = () => {
-//     (editField.value && onlySpaces(editField.value) == false) ? editSubmit.removeAttribute('disabled') : editSubmit.setAttribute('disabled', '');
-// }
-// manipulateSubmit();
-// editField.addEventListener('input', () => {
-//     manipulateSubmit();
-// });
-// let initialData = JSON.parse(localStorage.getItem('tasks'));
-// let originalTaskText = taskTextWrapper.textContent;
-// editForm.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     let replaceOldValue = () => {
-//         let itemIndex = initialData.indexOf(originalTaskText);
-//         let newTaskText = editField.value;
-//         initialData.splice(itemIndex, 1, newTaskText);
-//         localStorage.setItem('tasks', JSON.stringify(initialData));
-//         originalTaskText = newTaskText;
-//     }
-//     (initialData.indexOf(editField.value) == -1) ? replaceOldValue() : null;
-//     let taskTextWrapper = item.querySelector('span');
-//     taskTextWrapper.classList.remove('d-none');
-//     taskTextWrapper.classList.add('d-inline-block');
-//     itemTaskControls.classList.remove('d-none');
-//     itemTaskControls.classList.add('d-inline-block');
-//     editForm.remove();
-// });
-// closeEdit(parentLi);
+// edit task: save
+let saveEdit = (item, oldText) => {
+    let taskTextWrapper = item.querySelector('span');
+    let itemTaskControls = item.querySelector('.task-controls');
+    let editForm = item.querySelector('.edit-form');
+    let editField = editForm.querySelector('.edit-task-text');
+    let editSubmit = item.querySelector('.edit-submit');
+    const manipulateSubmit = () => {
+        (editField.value && onlySpaces(editField.value) == false && editField.value != oldText) ? editSubmit.removeAttribute('disabled') : editSubmit.setAttribute('disabled', '');
+    }
+    manipulateSubmit();
+    editField.addEventListener('input', () => {
+        manipulateSubmit();
+    });
+    let initialData = JSON.parse(localStorage.getItem('tasks'));
+    editForm.addEventListener('submit', (e) => {
+        let replaceOldValue = () => {
+            let itemIndex = initialData.indexOf(oldText);
+            let newTaskText = editField.value;
+            initialData.splice(itemIndex, 1, newTaskText);
+            localStorage.setItem('tasks', JSON.stringify(initialData));
+            taskTextWrapper.textContent = newTaskText;
+        }
+        e.preventDefault();
+        (initialData.indexOf(editField.value) == -1) ? replaceOldValue() : null;
+        taskTextWrapper.classList.remove('d-none');
+        taskTextWrapper.classList.add('d-inline-block');
+        itemTaskControls.classList.remove('d-none');
+        itemTaskControls.classList.add('d-inline-block');
+        editForm.remove();
+    });
+};
 
 // empty list button
 let emptyListButton = document.querySelector('.empty-the-list');
