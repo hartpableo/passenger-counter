@@ -181,7 +181,7 @@ let editTrigger = (item) => {
         let itemTaskControls = parentLi.querySelector('.task-controls');
         itemTaskControls.classList.add('d-none');
         itemTaskControls.classList.remove('d-inline-block');
-        editForm.addEventListener('submit', () => {
+        editForm.addEventListener('submit', (e) => {
             let replaceOldValue = () => {
                 let itemIndex = initialData.indexOf(originalTaskText);
                 let newTaskText = editField.value;
@@ -190,6 +190,13 @@ let editTrigger = (item) => {
                 originalTaskText = newTaskText;
             }
             (initialData.indexOf(editField.value) == -1) ? replaceOldValue() : null;
+            let taskTextWrapper = item.querySelector('span');
+            taskTextWrapper.classList.remove('d-none');
+            taskTextWrapper.classList.add('d-inline-block');
+            itemTaskControls.classList.remove('d-none');
+            itemTaskControls.classList.add('d-inline-block');
+            editForm.remove();
+            e.preventDefault();
         });
         closeEdit(parentLi);
         e.preventDefault();
