@@ -153,7 +153,8 @@ let editButton = document.querySelectorAll('.edit');
 
 let editTrigger = (item) => {
     item.addEventListener('click', (e) => {
-        let element = e.currentTarget;
+        let element = e.target;
+        console.log(element)
         let parentLi = element.parentNode.closest('.task-list-item');
         let taskTextWrapper = parentLi.querySelector('span');
         let taskText = taskTextWrapper.textContent;
@@ -268,7 +269,9 @@ taskForm.addEventListener('submit', (e) => {
 
     // edit task
     let editButton = document.querySelectorAll('.edit');
-    editButton.forEach(editTrigger);
+    for (let singleEditButton of editButton) {
+        singleEditButton.addEventListener('click', editTrigger());
+    };
     
     (listItemCount === 0 && initialData.length === 0) ? removeTaskList() : displayTaskList();
     e.preventDefault();
