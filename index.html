@@ -26,13 +26,15 @@
                             <div class="row">
                                 <label for="task" class="visually-hidden">Task To Do</label>
                                 <input class="col-12 col-md-9" type="text" id="task" placeholder="What will you be doing?">
-                                <button id="task-button" class="col-12 col-md-3 btn btn-primary" type="submit">Add Task</button>
+                                <input type="hidden" id="save-index" />
+                                <button id="add-task-button" class="col-12 col-md-3 btn btn-primary">Add Task</button>
+                                <button id="edit-task-button" class="col-12 col-md-3 btn btn-secondary" style="display: none;">Edit Task</button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="tasks-container w-100">
-                    <div class="tasks-general-controls w-100 d-flex justify-content-center justify-content-md-end align-items-start" aria-hidden="true">
+                    <div class="tasks-general-controls w-100 d-flex justify-content-center justify-content-md-end align-items-start" style="display: none !important;">
                         <button class="empty-the-list"><i class="bi bi-trash3-fill"></i> Remove All</button>
                     </div>
                     <p class="notice d-none w-100 text-center fw-bold text-white">You don't have any tasks yet! 😃</p>
