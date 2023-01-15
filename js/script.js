@@ -103,7 +103,9 @@ function done( index ) {
 }
 
 // Edit task: save
-editTaskButton.addEventListener( 'click', () => {
+editTaskButton.addEventListener( 'click', (e) => {
+
+    e.preventDefault();
 
     // do NOT add task if spaces only
     if ( onlySpaces( taskInput.value ) == false ) {
